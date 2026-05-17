@@ -1,10 +1,7 @@
-# This .gitignore file should be placed at the root of your Unity project directory
-#
-# Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
-#
-# Recommended: add any editor/OS/tool-specific ignore rules from the Global/ templates as needed.
-# See: https://github.com/github/gitignore/tree/main/Global
-#
+# =======================
+# GitHub Official Unity .gitignore
+# =======================
+
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
@@ -104,3 +101,55 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# =======================
+# MJH: Crown & Cartridge - Custom Additions
+# =======================
+
+# Custom build outputs
+/4_Build/BuildOutput/
+/4_Build/WebGL/Build/
+
+# Backend / Server
+/5_Server/node_modules/
+/5_Server/package-lock.json
+/5_Server/.env
+/5_Server/.env.local
+
+# Local database (user data)
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# WebGL template temp files
+/4_WebBuild/WebGLTemplates/*/temp/
+/4_WebBuild/WebGLTemplates/*/.tmp/
+
+# Runtime generated saves
+/Saves/
+/PlayerSaves/
+/SaveData/
+
+# Unity Analytics
+/[Aa]ssets/UnityAnalytics/
+
+# Editor personal settings
+*.editorconfig
+*.DotSettings.user
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
