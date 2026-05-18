@@ -1,77 +1,34 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
+using System.Collections async;
 
 public class SceneLoader : MonoBehaviour
 {
-    public static SceneLoader Instance { get; private set; }
-
-    [SerializeField] private float minimumLoadTime = 1f;
-    private AsyncOperation asyncOperation;
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     public void LoadScene(string sceneName)
     {
-        StartCoroutine(LoadSceneAsync(sceneName));
+        SceneManager.LoadScene(sceneName);
     }
-
-    public void ReloadScene()
+    
+    public void LoadSceneAsync(string sceneName)
     {
-        string currentScene = SceneManager.GetActiveScene().name;
-        LoadScene(currentScene);
+        StartCoroutine(LoadAsync(sceneName));
     }
-
-    IEnumerator LoadSceneAsync(string sceneName)
+    
+    System.Collections.IEnumerator LoadAsync(string sceneName)
     {
-        // লোডিং স্ক্রিন দেখান
-        UIManager.Instance?.ShowLoadingScreen(true);
-        
-        float startTime = Time.time;
-        
-        // সিন লোড শুরু করুন
-        asyncOperation = SceneManager.LoadSceneAsync(sceneName);
-        asyncOperation.allowSceneActivation = false;
-        
-        // লোডিং প্রগ্রেস দেখান
-        while (asyncOperation.progress < 0.9f)
+        var asyncOp = SceneManager.LoadSceneAsync(sceneName);
+        while (!asyncOp.isDone)
         {
-            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
-            // এখানে প্রগ্রেস বার আপডেট করতে পারেন
             yield return null;
         }
-        
-        // নূন্যতম লোডিং টাইম পার হয়েছে কিনা চেক করুন
-        float elapsedTime = Time.time - startTime;
-        if (elapsedTime < minimumLoadTime)
-        {
-            yield return new WaitForSeconds(minimumLoadTime - elapsedTime);
-        }
-        
-        // সিন এক্টিভেট করুন
-        asyncOperation.allowSceneActivation = true;
-        
-        // লোডিং স্ক্রিন লুকান
-        UIManager.Instance?.ShowLoadingScreen(false);
     }
-
-    public float GetLoadingProgress()
+    
+    public void QuitGame()
     {
-        if (asyncOperation != null)
-        {
-            return Mathf.Clamp01(asyncOperation.progress / 0.9f);
-        }
-        return 0f;
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
