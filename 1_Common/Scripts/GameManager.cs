@@ -1,20 +1,13 @@
 using UnityEngine;
-using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-
-    [Header("Game State")]
-    public GameState currentState = GameState.Menu;
-    public int currentScore = 0;
+    
+    public bool isGamePaused = false;
     public int currentLevel = 1;
-
-    [Header("Events")]
-    public event Action<GameState> OnGameStateChanged;
-    public event Action<int> OnScoreChanged;
-    public event Action<int> OnLevelChanged;
-
+    public int playerScore = 0;
+    
     void Awake()
     {
         if (Instance == null)
@@ -27,59 +20,28 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void Start()
+    
+    public void PauseGame()
     {
-        LoadGameData();
+        isGamePaused = true;
+        Time.timeScale = 0f;
     }
-
-    public void ChangeState(GameState newState)
+    
+    public void ResumeGame()
     {
-        currentState = newState;
-        OnGameStateChanged?.Invoke(newState);
-        Debug.Log($"Game State Changed to: {newState}");
+        isGamePaused = false;
+        Time.timeScale = 1f;
     }
-
-    public void AddScore(int amount)
+    
+    public void AddScore(int points)
     {
-        currentScore += amount;
-        OnScoreChanged?.Invoke(currentScore);
-        
-        // লেভেল চেক (প্রতি 1000 স্কোরে লেভেল বাড়ে)
-        int newLevel = (currentScore / 1000) + 1;
-        if (newLevel > currentLevel)
-        {
-            currentLevel = newLevel;
-            OnLevelChanged?.Invoke(currentLevel);
-        }
+        playerScore += points;
+        Debug.Log("Score: " + playerScore);
     }
-
-    public void SaveGameData()
+    
+    public void RestartLevel()
     {
-        PlayerPrefs.SetInt("Score", currentScore);
-        PlayerPrefs.SetInt("Level", currentLevel);
-        PlayerPrefs.Save();
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.ReloadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
-
-    void LoadGameData()
-    {
-        currentScore = PlayerPrefs.GetInt("Score", 0);
-        currentLevel = PlayerPrefs.GetInt("Level", 1);
-    }
-
-    public void ResetGame()
-    {
-        currentScore = 0;
-        currentLevel = 1;
-        SaveGameData();
-    }
-}
-
-public enum GameState
-{
-    Menu,
-    Playing,
-    Paused,
-    GameOver,
-    Victory
 }
