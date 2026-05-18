@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJH-Crown-Cartridge</title>
+    <link rel="icon" href="icons/favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            max-width: 1200px;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .game-container {
+            width: 100%;
+            max-width: 1280px;
+            height: 720px;
+            background: #000;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .game-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .platform-badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .badge {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .download-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 30px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 MJH-Crown-Cartridge</h1>
+        <p>Cross-Platform Unity Game</p>
+        
+        <div class="platform-badges">
+            <span class="badge">📱 Android</span>
+            <span class="badge">🍎 iOS</span>
+            <span class="badge">💻 Windows</span>
+            <span class="badge">🖥️ macOS</span>
+            <span class="badge">🐧 Linux</span>
+            <span class="badge">🌐 WebGL</span>
+        </div>
+
+        <div class="game-container">
+            <div class="loading" id="loading">Loading Game...</div>
+            <iframe id="gameFrame" class="game-frame" src="WebGL/index.html" style="display:none;"></iframe>
+        </div>
+
+        <div class="download-buttons">
+            <a href="#" class="btn">📥 Download for Android</a>
+            <a href="#" class="btn">📥 Download for Windows</a>
+            <a href="#" class="btn">📱 App Store</a>
+            <a href="#" class="btn">🌐 Play Game Now</a>
+        </div>
+
+        <div class="info">
+            <h3>About This Game</h3>
+            <p>Across-platform game featuring shooter and kingdom strategy modes</p>
+            <p>Available on Windows, Mac, Linux, Android, iOS, and WebGL</p>
+        </div>
+    </div>
+
+    <script>
+        // Service Worker registration for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+
+        // Hide loading when game loads
+        const gameFrame = document.getElementById('gameFrame');
+        gameFrame.onload = () => {
+            document.getElementById('loading').style.display = 'none';
+            gameFrame.style.display = 'block';
+        };
+    </script>
+</body>
+</html>
