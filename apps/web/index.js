@@ -1,4 +1,3 @@
-```javascript
 import './styles.css';
 import { initGame } from './game';
 import { initRouter } from './router';
